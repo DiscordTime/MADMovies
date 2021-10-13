@@ -1,33 +1,31 @@
 package br.org.cesar.madmovies.movies.view.ui.components
 
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
-import androidx.navigation.NavArgumentBuilder
+import androidx.compose.runtime.State
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.Navigator
-import androidx.navigation.navArgument
-import br.org.cesar.madmovies.movies.model.Movie
-import br.org.cesar.madmovies.movies.view.MoviesActivity
+import br.org.cesar.madmovies.movies.domain.model.Movie
 
 @Composable
-fun movieList(movies: List<Movie>, navController: NavController) {
+fun MovieList(movies: State<List<Movie>>, navController: NavController) {
+    MovieListContent(movies, navController)
+}
+
+@Composable
+fun MovieListContent(
+    movies: State<List<Movie>>,
+    navController: NavController) {
     LazyColumn() {
-        items(movies) { movie ->
+        items(movies.value) { movie ->
             MovieItem(movie = movie, navController)
         }
     }
 }
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieItem(movie: Movie, navController: NavController) {
