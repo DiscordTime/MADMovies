@@ -7,6 +7,8 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -23,10 +25,8 @@ class MoviesActivity : ComponentActivity() {
     lateinit var navController: NavHostController
     private val viewModel by viewModels<ListMoviesViewModel>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
            MovieActivity()
         }
@@ -34,12 +34,14 @@ class MoviesActivity : ComponentActivity() {
 
     @Composable
     private fun MovieActivity() {
+        val state = viewModel.movieListFlow.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .collectAsState(initial = listOf())
         MADMoviesTheme {
             navController = rememberNavController()
             NavHost(navController = navController,
                 startDestination = "movieList") {
                 composable("movieList") {
-                    MovieList(viewModel.movieListFlow.collectAsState(), navController)
+                    MovieList(state, navController)
                 }
                 composable(
                     "movieDetails/{movie}",
