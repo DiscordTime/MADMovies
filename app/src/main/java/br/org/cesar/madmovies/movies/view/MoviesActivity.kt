@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,14 +35,18 @@ class MoviesActivity : ComponentActivity() {
 
     @Composable
     private fun MovieActivity() {
-        val state = viewModel.movieListFlow.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .collectAsState(initial = listOf())
+        val state = viewModel.movieListFlow
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .collectAsState(initial = viewModel.movieListFlow.value)
+        val lazystate = rememberLazyListState()
         MADMoviesTheme {
             navController = rememberNavController()
             NavHost(navController = navController,
                 startDestination = "movieList") {
                 composable("movieList") {
-                    MovieList(state, navController)
+                    MovieList(state, lazystate, navController) {
+                        viewModel.getNextPage()
+                    }
                 }
                 composable(
                     "movieDetails/{movie}",
@@ -58,6 +63,5 @@ class MoviesActivity : ComponentActivity() {
     fun DefaultPreview() {
         MovieActivity()
     }
-
 
 }

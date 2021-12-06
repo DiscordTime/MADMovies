@@ -10,9 +10,9 @@ object RemoteRepository : Repository {
 
     private val retrofitService: MovieDbService = RetrofitServiceFactory.getRetrofitService()
 
-    override suspend fun getMovieList() : List<Movie> {
+    override suspend fun getMovieList(page: Int) : List<Movie> {
         return retrofitService
-            .getPopularMovies(RetrofitServiceFactory.api_key)
+            .getPopularMovies(RetrofitServiceFactory.api_key, page)
             .results.map { Movie(it) }
     }
 

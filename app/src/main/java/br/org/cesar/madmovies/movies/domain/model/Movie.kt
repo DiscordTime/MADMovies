@@ -8,6 +8,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Movie(val id: Int, val title: String, val year: String) : Parcelable {
     constructor(movie: RemoteMovie) : this(
-        movie.id, movie.title, movie.release_date
+        movie.id, movie.title, movie.release_date ?: ""
     )
 }
