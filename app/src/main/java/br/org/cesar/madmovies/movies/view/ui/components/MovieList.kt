@@ -26,7 +26,7 @@ fun MovieListContent(
 ) {
     LazyColumn(state = lazystate) {
         items(movies.value) { movie ->
-            MovieItem(movie = movie, navController)
+            MovieItem(movie, navController)
         }
     }
     if (lazystate.isScrolledToTheEnd()) {

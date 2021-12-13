@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 class ListMoviesViewModel : ViewModel() {
 
     private var page: Int = 1
-    private var _movieListFlow: MutableStateFlow<MutableList<Movie>> = MutableStateFlow(mutableListOf())
-    var movieListFlow: StateFlow<List<Movie>> =
+    private val _movieListFlow: MutableStateFlow<MutableList<Movie>> = MutableStateFlow(mutableListOf())
+    val movieListFlow: StateFlow<List<Movie>> =
         _movieListFlow
             .onSubscription {
                 if (_movieListFlow.value.size == 0) {
@@ -22,11 +22,11 @@ class ListMoviesViewModel : ViewModel() {
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), _movieListFlow.value)
 
     fun getNextPage() {
-        Log.d("duds", "getNextPage $page")
+
         viewModelScope.launch {
-            Log.d("duds", "getPage $page")
-            val currentList = _movieListFlow.value
-            currentList.addAll(GetMovieList(RemoteRepository, page++))
+            val currentList = _movieListFlow.value.apply {
+                addAll(GetMovieList(RemoteRepository, page++))
+            }
             _movieListFlow.emit(currentList)
         }
     }

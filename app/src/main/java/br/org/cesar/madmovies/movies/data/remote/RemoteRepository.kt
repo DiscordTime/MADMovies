@@ -1,9 +1,7 @@
 package br.org.cesar.madmovies.movies.data.remote
 
-import android.util.Log
 import br.org.cesar.madmovies.movies.data.Repository
-import br.org.cesar.madmovies.movies.data.model.RemoteMovie
-import br.org.cesar.madmovies.movies.data.model.RemoteMovieList
+import br.org.cesar.madmovies.movies.data.model.asMovie
 import br.org.cesar.madmovies.movies.domain.model.Movie
 
 object RemoteRepository : Repository {
@@ -12,13 +10,13 @@ object RemoteRepository : Repository {
 
     override suspend fun getMovieList(page: Int) : List<Movie> {
         return retrofitService
-            .getPopularMovies(RetrofitServiceFactory.api_key, page)
-            .results.map { Movie(it) }
+            .getPopularMovies(RetrofitServiceFactory.API_KEY, page)
+            .results.map { it.asMovie() }
     }
 
     override suspend fun getMovieDetails(movieId: Int): Movie {
         return retrofitService
-            .getMovieDetail(movieId, RetrofitServiceFactory.api_key)
-            .let { Movie(it) }
+            .getMovieDetail(movieId, RetrofitServiceFactory.API_KEY)
+            .asMovie()
     }
 }
