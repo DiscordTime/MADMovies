@@ -7,12 +7,12 @@ import java.lang.IllegalArgumentException
 class RetrofitServiceFactory {
 
     companion object {
-        val url = "https://api.themoviedb.org/3/";
-        val api_key = "932ade838ca63f016cd03c3c36943018"; // Remember to add api_key before running
+        private const val URL = "https://api.themoviedb.org/3/";
+        const val API_KEY = ""; // Remember to add api_key before running
         fun getRetrofitService(): MovieDbService {
-            if (api_key.isEmpty()) throw IllegalArgumentException("Empty api key")
+            if (API_KEY.isEmpty()) throw IllegalArgumentException("Empty api key")
             val retrofit = Retrofit.Builder()
-                .baseUrl(url)
+                .baseUrl(URL)
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
             return retrofit.create(MovieDbService::class.java)

@@ -1,5 +1,6 @@
 package br.org.cesar.madmovies.movies.data.model
 
+import br.org.cesar.madmovies.movies.domain.model.Movie
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -18,3 +19,5 @@ data class RemoteMovie(
  val vote_average: Double = 0.0,
  val vote_count: Int = 0
 )
+
+fun RemoteMovie.asMovie() = Movie(id, title, release_date ?: "", overview, popularity)
