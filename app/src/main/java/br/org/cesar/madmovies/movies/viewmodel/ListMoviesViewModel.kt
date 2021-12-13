@@ -19,15 +19,16 @@ class ListMoviesViewModel : ViewModel() {
                 if (_movieListFlow.value.size == 0) {
                     getNextPage()
                 }
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(2000), _movieListFlow.value)
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), _movieListFlow.value)
 
     fun getNextPage() {
+        Log.d("duds", "getNextPage $page")
         viewModelScope.launch {
+            Log.d("duds", "getPage $page")
             val currentList = _movieListFlow.value
-            currentList.addAll(GetMovieList(RemoteRepository, page))
+            currentList.addAll(GetMovieList(RemoteRepository, page++))
             _movieListFlow.emit(currentList)
         }
-        page++
     }
 
 }
