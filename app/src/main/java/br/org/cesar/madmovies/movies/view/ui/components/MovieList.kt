@@ -1,7 +1,5 @@
 package br.org.cesar.madmovies.movies.view.ui.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -10,7 +8,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import br.org.cesar.madmovies.movies.domain.model.Movie
 
@@ -42,7 +39,7 @@ fun MovieListContent(
 fun MovieItem(movie: Movie, navController: NavController) {
     Card(
         onClick = {
-            navController.navigate("movieDetails/"+movie.title)
+            navController.navigate("movieDetails/"+movie.id)
     }) {
         Text(text = movie.title)
     }

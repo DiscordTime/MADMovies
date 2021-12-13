@@ -16,7 +16,9 @@ object RemoteRepository : Repository {
             .results.map { Movie(it) }
     }
 
-    override fun getMovieDetails() {
-        TODO("Not yet implemented")
+    override suspend fun getMovieDetails(movieId: Int): Movie {
+        return retrofitService
+            .getMovieDetail(movieId, RetrofitServiceFactory.api_key)
+            .let { Movie(it) }
     }
 }
