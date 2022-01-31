@@ -1,9 +1,9 @@
 package br.org.cesar.madmovies.movies.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.org.cesar.madmovies.movies.data.remote.RemoteRepository
+import br.org.cesar.madmovies.movies.data.MovieRepository
+import br.org.cesar.madmovies.movies.data.remote.RemoteDatasource
 import br.org.cesar.madmovies.movies.domain.model.Movie
 import br.org.cesar.madmovies.movies.domain.usecase.GetMovieDetail
 import kotlinx.coroutines.flow.*
@@ -21,9 +21,11 @@ class MovieDetailsViewModel : ViewModel() {
                 }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), _movieFlow.value)
 
+    private val getMovieDetailUseCase = GetMovieDetail(MovieRepository(listOf(RemoteDatasource), listOf()))
+
     fun getMovieDetail(movieId: Int) {
         viewModelScope.launch {
-            _movieFlow.emit(GetMovieDetail(RemoteRepository, movieId))
+            _movieFlow.emit(getMovieDetailUseCase(movieId))
         }
     }
 
