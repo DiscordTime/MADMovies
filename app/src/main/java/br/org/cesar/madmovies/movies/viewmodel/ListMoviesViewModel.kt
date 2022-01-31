@@ -1,9 +1,9 @@
 package br.org.cesar.madmovies.movies.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.org.cesar.madmovies.movies.data.remote.RemoteRepository
+import br.org.cesar.madmovies.movies.data.MovieRepository
+import br.org.cesar.madmovies.movies.data.remote.RemoteDatasource
 import br.org.cesar.madmovies.movies.domain.model.Movie
 import br.org.cesar.madmovies.movies.domain.usecase.GetMovieList
 import kotlinx.coroutines.flow.*
@@ -20,12 +20,12 @@ class ListMoviesViewModel : ViewModel() {
                     getNextPage()
                 }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), _movieListFlow.value)
+    private val getMovieList = GetMovieList(MovieRepository(listOf(RemoteDatasource), listOf()))
 
     fun getNextPage() {
-
         viewModelScope.launch {
             val currentList = _movieListFlow.value.apply {
-                addAll(GetMovieList(RemoteRepository, page++))
+                addAll(getMovieList(page++))
             }
             _movieListFlow.emit(currentList)
         }
