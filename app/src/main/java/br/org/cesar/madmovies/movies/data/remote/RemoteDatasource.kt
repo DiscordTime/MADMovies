@@ -1,10 +1,12 @@
 package br.org.cesar.madmovies.movies.data.remote
 
+import android.content.Context
+import android.net.ConnectivityManager
 import br.org.cesar.madmovies.movies.data.IReadDataSource
 import br.org.cesar.madmovies.movies.data.model.asMovie
 import br.org.cesar.madmovies.movies.domain.model.Movie
 
-object RemoteDatasource : IReadDataSource {
+class RemoteDatasource(private val context: Context) : IReadDataSource {
 
     private val retrofitService: MovieDbService = RetrofitServiceFactory.getRetrofitService()
 
@@ -21,7 +23,9 @@ object RemoteDatasource : IReadDataSource {
     }
 
     override suspend fun canRead(): Boolean {
-        // TODO: Check internet
-        return true
+        val cm : ConnectivityManager = context
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCap = cm.getNetworkCapabilities(cm.activeNetwork)
+        return networkCap?.let { true } ?: false
     }
 }
