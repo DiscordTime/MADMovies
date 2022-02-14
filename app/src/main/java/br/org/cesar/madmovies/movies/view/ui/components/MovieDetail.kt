@@ -9,7 +9,6 @@ import androidx.compose.runtime.State
 import br.org.cesar.madmovies.movies.domain.model.Movie
 
 
-
 @Composable
 fun MovieDetails(state: State<Movie>) {
     Card {

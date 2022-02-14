@@ -10,7 +10,7 @@ class RemoteDatasource(private val context: Context) : IReadDataSource {
 
     private val retrofitService: MovieDbService = RetrofitServiceFactory.getRetrofitService()
 
-    override suspend fun getMovieList(page: Int) : List<Movie> {
+    override suspend fun getMovieList(page: Int): List<Movie> {
         return retrofitService
             .getPopularMovies(RetrofitServiceFactory.API_KEY, page)
             .results.map { it.asMovie() }
@@ -23,7 +23,7 @@ class RemoteDatasource(private val context: Context) : IReadDataSource {
     }
 
     override suspend fun canRead(): Boolean {
-        val cm : ConnectivityManager = context
+        val cm: ConnectivityManager = context
             .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkCap = cm.getNetworkCapabilities(cm.activeNetwork)
         return networkCap?.let { true } ?: false

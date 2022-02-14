@@ -1,21 +1,15 @@
 package br.org.cesar.madmovies.movies.data
 
 import br.org.cesar.madmovies.movies.domain.model.Movie
-import java.util.stream.Collectors
-import java.util.HashSet
-
-
-
 
 class MovieRepository(
-    val readDatasources : List<IReadDataSource>,
-    val writeDatasources : List<IWriteDataSource>
+    private val readDataSources: List<IReadDataSource>,
+    private val writeDataSources: List<IWriteDataSource>
 ) : IMovieRepository {
 
-
     override suspend fun getMovieList(page: Int): List<Movie> {
-        val mapOfMovie : MutableMap<Int, Movie> = mutableMapOf()
-        readDatasources
+        val mapOfMovie: MutableMap<Int, Movie> = mutableMapOf()
+        readDataSources
             .filter { ds -> ds.canRead() }
             .map { ds -> ds.getMovieList(page) }
             .flatMap { list -> list.asIterable() }
@@ -33,8 +27,8 @@ class MovieRepository(
     }
 
     override suspend fun getMovieDetails(movieId: Int): Movie {
-        var movie : Movie? = null
-        readDatasources
+        var movie: Movie? = null
+        readDataSources
             .map { ds -> ds.getMovieDetails(movieId) }
             .forEach {
                 if (movie?.lastUpdatedTime ?: 0 <= it.lastUpdatedTime) {

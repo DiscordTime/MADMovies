@@ -32,7 +32,7 @@ class MoviesActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-           MovieActivity()
+            MovieActivity()
         }
     }
 
@@ -40,8 +40,10 @@ class MoviesActivity : ComponentActivity() {
     private fun MovieActivity() {
         MADMoviesTheme {
             navController = rememberNavController()
-            NavHost(navController = navController,
-                startDestination = "movieList") {
+            NavHost(
+                navController = navController,
+                startDestination = "movieList"
+            ) {
                 composable("movieList") {
                     val state = listViewModel.movieListFlow
                         .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
@@ -53,7 +55,7 @@ class MoviesActivity : ComponentActivity() {
                 }
                 composable(
                     "movieDetails/{movie}",
-                    arguments = listOf(navArgument("movie") { type = NavType.IntType})
+                    arguments = listOf(navArgument("movie") { type = NavType.IntType })
                 ) {
                     detailsViewModel.movieId = it.arguments?.getInt("movie") ?: -1
                     val state = detailsViewModel.movieFlow
