@@ -1,5 +1,7 @@
 package br.org.cesar.madmovies.movies.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.org.cesar.madmovies.movies.data.MovieRepository
@@ -9,7 +11,7 @@ import br.org.cesar.madmovies.movies.domain.usecase.GetMovieDetail
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class MovieDetailsViewModel : ViewModel() {
+class MovieDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
     var movieId: Int = -1
     private var _movieFlow: MutableStateFlow<Movie> = MutableStateFlow(Movie())
@@ -21,7 +23,12 @@ class MovieDetailsViewModel : ViewModel() {
                 }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), _movieFlow.value)
 
-    private val getMovieDetailUseCase = GetMovieDetail(MovieRepository(listOf(RemoteDatasource), listOf()))
+    private val getMovieDetailUseCase = GetMovieDetail(
+        MovieRepository(
+            listOf(RemoteDatasource(application.applicationContext)),
+            listOf()
+        )
+    )
 
     fun getMovieDetail(movieId: Int) {
         viewModelScope.launch {
