@@ -24,6 +24,8 @@ class MovieRepository(
                     if (movieInMap.lastUpdatedTime <= movieInList.lastUpdatedTime) {
                         mapOfMovie.replace(movieInList.id, movieInList)
                     }
+                } ?: run {
+                    mapOfMovie[movieInList.id] = movieInList
                 }
             }
 
